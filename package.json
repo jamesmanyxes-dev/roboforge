@@ -1,0 +1,15 @@
+{
+  "name": "roboforge-lab",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "RoboForge Lab — browser-based virtual robotics laboratory",
+  "main": "server.js",
+  "engines": { "node": "18.x" },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

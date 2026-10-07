@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RoboForge Lab</title>
+<link rel="stylesheet" href="style.css?v=2" />
+</head>
+<body>
+<div id="app">
+  <header id="topbar">
+    <div class="logo">⚡ ROBO<span>FORGE</span> <em>LAB</em></div>
+    <div class="top-actions">
+      <span id="buildStatus" class="status-chip">BUILD INCOMPLETE</span>
+      <button id="btnRun" class="btn run">▶ RUN ROBOT</button>
+      <button id="btnStop" class="btn stop">■ STOP</button>
+      <button id="btnEstop" class="btn estop" title="Emergency stop — cuts all power">✖ E-STOP</button>
+    </div>
+  </header>
+
+  <main id="layout">
+    <!-- LEFT: parts library -->
+    <aside id="library" class="panel">
+      <h2>PARTS LIBRARY</h2>
+      <div id="libTabs" class="tabs"></div>
+      <div id="libList" class="lib-list"></div>
+    </aside>
+
+    <!-- CENTER: assembly chamber -->
+    <section id="chamber" class="panel">
+      <div class="chamber-head">
+        <h2>ASSEMBLY CHAMBER</h2>
+        <div class="workspace-tabs" id="workspaceTabs"></div>
+      </div>
+      <div id="robotView">
+        <div id="robotSilhouette">
+          <div class="robo-head"></div>
+          <div class="robo-torso"></div>
+          <div class="robo-arms"><div></div><div></div></div>
+          <div class="robo-legs"><div></div><div></div></div>
+          <div id="powerGlow"></div>
+        </div>
+        <div id="scanline"></div>
+      </div>
+      <div id="buildList" class="build-list"></div>
+    </section>
+
+    <!-- RIGHT: diagnostics + telemetry -->
+    <aside id="rightcol">
+      <div class="panel">
+        <h2>DIAGNOSTICS</h2>
+        <div id="diagnostics" class="diag"></div>
+      </div>
+      <div class="panel">
+        <h2>TELEMETRY</h2>
+        <div id="telemetry" class="telemetry"></div>
+      </div>
+      <div class="panel">
+        <h2>PROGRAM</h2>
+        <textarea id="program" spellcheck="false" placeholder="WHEN START
+  MOVE FORWARD SPEED 60 TIME 3
+  IF OBSTACLE
+    STOP"></textarea>
+        <div class="prog-actions">
+          <button id="btnCompile" class="btn">⚙ COMPILE</button>
+          <span id="compileStatus"></span>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- AI chat -->
+  <section id="aichat" class="panel">
+    <div class="chat-head">
+      <h2>AI ASSISTANT</h2>
+      <div class="personas" id="personas"></div>
+    </div>
+    <div class="mode-row">
+      <button id="modeChat" class="mode-btn active">1-on-1</button>
+      <button id="modeTalk" class="mode-btn">🎙 TEAM TALK — robots discuss</button>
+      <button id="btnMute" class="mode-btn" title="Toggle voices">🔊 VOICE ON</button>
+    </div>
+    <div id="talkPick" class="talk-pick" style="display:none">
+      <label>Voice A <select id="talkA"></select></label>
+      <label>Voice B <select id="talkB"></select></label>
+      <input id="talkTopic" placeholder="Topic — e.g. 'design a rescue robot'" />
+      <button id="talkStart" class="btn run">▶ START CONVERSATION</button>
+      <button id="talkStop" class="btn stop" style="display:none">■ STOP</button>
+    </div>
+    <div id="chatLog"></div>
+    <div class="chat-input">
+      <input id="chatBox" placeholder="Ask the AI — 'make my robot walk forward'…" />
+      <button id="chatSend" class="btn run">SEND</button>
+    </div>
+  </section>
+</div>
+<div id="toast"></div>
+<script src="app.js?v=2"></script>
+</body>
+</html>
