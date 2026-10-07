@@ -4,81 +4,159 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>RoboForge Lab</title>
-<link rel="stylesheet" href="style.css?v=2" />
+<link rel="stylesheet" href="style.css?v=7" />
 </head>
 <body>
 <div id="app">
+  <!-- TOP BAR -->
   <header id="topbar">
-    <div class="logo">⚡ ROBO<span>FORGE</span> <em>LAB</em></div>
+    <div class="logo">⬡ Robo<span>Forge</span></div>
+    <nav id="mainNav">
+      <span class="navlink">Build</span><i>|</i><span class="navlink">Program</span><i>|</i><span class="navlink nav-active">Bring to Life</span>
+    </nav>
     <div class="top-actions">
       <span id="buildStatus" class="status-chip">BUILD INCOMPLETE</span>
       <button id="btnRun" class="btn run">▶ RUN ROBOT</button>
       <button id="btnStop" class="btn stop">■ STOP</button>
-      <button id="btnEstop" class="btn estop" title="Emergency stop — cuts all power">✖ E-STOP</button>
+      <button id="btnEstop" class="btn estop" title="Emergency stop">✖ E-STOP</button>
     </div>
   </header>
 
+  <!-- MAIN GRID -->
   <main id="layout">
-    <!-- LEFT: parts library -->
+    <!-- LEFT: PARTS LIBRARY -->
     <aside id="library" class="panel">
-      <h2>PARTS LIBRARY</h2>
-      <div id="libTabs" class="tabs"></div>
+      <h2>🔩 Parts Library</h2>
+      <input id="libSearch" placeholder="🔍 Search parts..." />
+      <div id="libTabs" class="lib-cats"></div>
       <div id="libList" class="lib-list"></div>
     </aside>
 
-    <!-- CENTER: assembly chamber -->
-    <section id="chamber" class="panel">
-      <div class="chamber-head">
-        <h2>ASSEMBLY CHAMBER</h2>
-        <div class="workspace-tabs" id="workspaceTabs"></div>
-      </div>
-      <div id="robotView">
-        <div id="robotSilhouette">
-          <div class="robo-head"></div>
-          <div class="robo-torso"></div>
-          <div class="robo-arms"><div></div><div></div></div>
-          <div class="robo-legs"><div></div><div></div></div>
-          <div id="powerGlow"></div>
+    <!-- CENTER: WORKSPACE 1 + CODE -->
+    <section id="centercol">
+      <div id="ws1panel" class="panel stage-panel">
+        <div class="ws-head"><h2>🔧 <span id="ws1name">Workspace 1 – Main Bot</span></h2><span class="ws-state active" id="ws1state">● Idle</span></div>
+        <div class="stage-stats">
+          <div><b>Total Weight</b><span id="statWeight">0 kg</span></div>
+          <div><b>Estimated Cost</b><span id="statCost">$0</span></div>
+          <div><b>Power Needs</b><span id="statPower">—</span></div>
         </div>
-        <div id="scanline"></div>
+        <div id="robotStage">
+          <div class="stage-floor"></div>
+          <div id="robotBody">
+            <div class="seg head" data-part="compute"><span>Head</span></div>
+            <div class="seg torso" data-part="frame"><span>Torso</span></div>
+            <div class="seg armL" data-part="actuators"><span>Arm</span></div>
+            <div class="seg armR" data-part="actuators"><span>Arm</span></div>
+            <div class="seg legL" data-part="structure"><span>Leg</span></div>
+            <div class="seg legR" data-part="structure"><span>Leg</span></div>
+            <div id="powerGlow"></div>
+          </div>
+          <div class="callout" id="co-camera" style="top:6%;left:52%">Camera (Vision)</div>
+          <div class="callout" id="co-imu" style="top:18%;left:60%">IMU (Balance)</div>
+          <div class="callout" id="co-compute" style="top:30%;left:64%">Main SBC (Brain)</div>
+          <div class="callout" id="co-actuators" style="top:44%;left:58%">Servo Motors (Joints)</div>
+          <div class="callout" id="co-power" style="top:62%;left:64%">Battery (Power)</div>
+          <div class="callout" id="co-lidar" style="top:74%;left:55%">LiDAR (Distance)</div>
+        </div>
       </div>
-      <div id="buildList" class="build-list"></div>
+
+      <div id="codeSensors" class="panel">
+        <h2>💻 Code &amp; Sensors</h2>
+        <div class="sub-tabs"><button class="subtab active" data-tab="code">Code</button><button class="subtab" data-tab="live">Live Data</button></div>
+        <pre id="codeView"># Compile your program to see the code map here.
+
+WHEN START
+    MOVE FORWARD SPEED 60 TIME 3
+    IF OBSTACLE
+        STOP</pre>
+        <div id="liveSensors" class="live-sensors" style="display:none"></div>
+      </div>
     </section>
 
-    <!-- RIGHT: diagnostics + telemetry -->
+    <!-- RIGHT: WORKSPACE 2 + MERGE -->
     <aside id="rightcol">
-      <div class="panel">
-        <h2>DIAGNOSTICS</h2>
-        <div id="diagnostics" class="diag"></div>
-      </div>
-      <div class="panel">
-        <h2>TELEMETRY</h2>
-        <div id="telemetry" class="telemetry"></div>
-      </div>
-      <div class="panel">
-        <h2>PROGRAM</h2>
-        <textarea id="program" spellcheck="false" placeholder="WHEN START
-  MOVE FORWARD SPEED 60 TIME 3
-  IF OBSTACLE
-    STOP"></textarea>
-        <div class="prog-actions">
-          <button id="btnCompile" class="btn">⚙ COMPILE</button>
-          <span id="compileStatus"></span>
+      <div class="panel ws2-panel">
+        <div class="ws-head"><h2>🤖 <span id="ws2name">Workspace 2 – Helper Bot</span></h2><span class="ws-state" id="ws2state">● Ready</span></div>
+        <div class="stage-stats small">
+          <div><b>Weight</b><span id="stat2Weight">0 kg</span></div>
+          <div><b>Cost</b><span id="stat2Cost">$0</span></div>
+          <div><b>Power</b><span id="stat2Power">—</span></div>
         </div>
+        <div id="miniStage"><div class="mini-bot"></div><div class="mini-floor"></div></div>
+        <h3 style="margin:10px 0 4px">Bot 2 Sensors</h3>
+        <div id="ws2Sensors" class="mini-sensors"></div>
+        <button id="btnWs2Edit" class="btn" style="width:100%;margin-top:8px">Edit Helper Bot</button>
+      </div>
+
+      <div class="panel">
+        <h2>🔗 Merge Workspaces</h2>
+        <div class="merge-opts">
+          <label><input type="checkbox" checked disabled> Enable bot-to-bot communication</label>
+          <label><input type="checkbox" checked> Share sensor data (vision / LiDAR)</label>
+          <label><input type="checkbox"> Sync movement &amp; positioning</label>
+          <label><input type="checkbox"> Custom behavior link</label>
+        </div>
+        <button id="btnMerge" class="btn run" style="width:100%">⚡ Merge &amp; Connect</button>
+        <h3 style="margin:12px 0 4px">Connection Status</h3>
+        <div id="connStatus" class="mini-sensors"></div>
       </div>
     </aside>
   </main>
 
-  <!-- AI chat -->
+  <!-- BOTTOM DASH -->
+  <section id="bottomDash">
+    <div class="panel" id="progressPanel">
+      <h2>📊 Build Progress</h2>
+      <div class="prog-flex">
+        <div id="progRing"><span id="progPct">0%</span></div>
+        <div id="progList" class="prog-list"></div>
+      </div>
+    </div>
+    <div class="panel" id="assemblyPanel">
+      <h2>🧩 Assembly View <span class="sub-tabs inline"><button class="subtab active">3D View</button><button class="subtab">Exploded View</button></span></h2>
+      <div id="buildList" class="build-grid"></div>
+      <p class="hintline">Drag &amp; drop? Click parts in the library to install them.</p>
+    </div>
+    <div class="panel" id="hintPanel">
+      <h2>⚠ Error / Hint Panel</h2>
+      <div id="hints"></div>
+    </div>
+    <div class="panel" id="visualPanel">
+      <h2>🧱 Program the Bot</h2>
+      <div id="visualCode" class="visual-code"></div>
+      <div class="prog-actions">
+        <button id="btnCompile" class="btn">⚙ COMPILE</button>
+        <span id="compileStatus"></span>
+      </div>
+      <details style="margin-top:8px"><summary style="cursor:pointer;color:var(--dim);font-size:11px">Show text editor</summary>
+        <textarea id="program" spellcheck="false" placeholder="WHEN START
+  MOVE FORWARD SPEED 60 TIME 3
+  IF OBSTACLE
+    STOP
+  END"></textarea>
+      </details>
+    </div>
+    <div class="panel" id="toolboxPanel">
+      <h2>🧰 Toolbox</h2>
+      <div class="tools">
+        <button>🔧<br>Build</button><button>💻<br>Program</button><button>🧪<br>Test</button>
+        <button>🪛<br>Screwdriver</button><button>🔑<br>Allen Keys</button><button>🧵<br>Cable Ties</button>
+        <button>🔋<br>Multimeter</button><button>🔥<br>Soldering</button><button>🖨<br>3D Printer</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI / TEAM TALK -->
   <section id="aichat" class="panel">
     <div class="chat-head">
-      <h2>AI ASSISTANT</h2>
+      <h2>🧠 AI ASSISTANT</h2>
       <div class="personas" id="personas"></div>
     </div>
     <div class="mode-row">
       <button id="modeChat" class="mode-btn active">1-on-1</button>
       <button id="modeTalk" class="mode-btn">🎙 TEAM TALK — robots discuss</button>
-      <button id="btnMute" class="mode-btn" title="Toggle voices">🔊 VOICE ON</button>
+      <button id="btnMute" class="mode-btn active" title="Toggle voices">🔊 VOICE ON</button>
     </div>
     <div id="talkPick" class="talk-pick" style="display:none">
       <label>Voice A <select id="talkA"></select></label>
@@ -93,8 +171,13 @@
       <button id="chatSend" class="btn run">SEND</button>
     </div>
   </section>
+
+  <footer id="statusbar">
+    <span>🌐 Real-Time Network — Bots connected · Sensors live · Cloud sync enabled</span>
+    <span class="flow">★ From Parts → To Code → To Real Robot</span>
+  </footer>
 </div>
 <div id="toast"></div>
-<script src="app.js?v=2"></script>
+<script src="app.js?v=7"></script>
 </body>
 </html>
